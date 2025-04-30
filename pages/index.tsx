@@ -93,9 +93,9 @@ const Index = () => {
       { accessorKey: "SourceID", header: "Job-Id" },
       { accessorKey: "WorkType", header: "Type" },
       { accessorKey: "SourceName", header: "VMS" },
-      { accessorKey: "WorkType", header: "Status" },
-      { accessorKey: "StatusString", header: "Open Position" },
-      { accessorKey: "PostDate", header: "Profession" },
+      { accessorKey: "StatusString", header: "Status" },
+      { accessorKey: "Positions", header: "Open Position" },
+      { accessorKey: "Degree", header: "Profession" },
       { accessorKey: "JobSpecialty", header: "Speciality" },
       { accessorKey: "Facility", header: "Facility" },
       { accessorKey: "Address", header: "Facility Address" },
@@ -104,8 +104,22 @@ const Index = () => {
       { accessorKey: "Shift", header: "Shift" },
       { accessorKey: "DurationWeeks", header: "Weeks" },
       { accessorKey: "BillRate", header: "Bill Rate" },
-      { accessorKey: "startDate", header: "Start Date" },
-      { accessorKey: "EndDate", header: "End Date" },
+      { 
+        accessorKey: "startDate", 
+        header: "Start Date",
+        Cell: ({ cell }) => {
+          const date = new Date(cell.getValue<string>());
+          return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
+        },
+      },
+      { 
+        accessorKey: "EndDate", 
+        header: "End Date",
+        Cell: ({ cell }) => {
+          const date = new Date(cell.getValue<string>());
+          return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
+        },
+      },
     ],
     []
   );
