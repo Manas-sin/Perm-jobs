@@ -153,13 +153,20 @@ const Index = () => {
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
           <MaterialReactTable
-            columns={columns}
-            data={data}
-            enableColumnResizing
-            enableSorting
-            enablePagination
-            enableRowSelection
-          />
+          columns={columns}
+          data={data}
+          enableColumnResizing
+          enableSorting
+          enablePagination
+          enableRowSelection
+          enableGrouping // Enable grouping feature
+          initialState={{
+            density: 'compact', // Set default density to compact
+            expanded: true, // Expand all grouped rows by default (if grouped)
+          }}
+          enableColumnActions // Enable column actions menu
+          enableColumnFilters // Enable column filters
+        />
         )}
       </div>
     </div>
