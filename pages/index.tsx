@@ -90,7 +90,7 @@ const Index = () => {
   // Updated columns definition with all required fields
   const columns = useMemo<MRT_ColumnDef<JobData>[]>(
     () => [
-      { accessorKey: "SourceID", header: "Job-Id" },
+     
       { accessorKey: "WorkType", header: "Type" },
       { accessorKey: "SourceName", header: "VMS" },
       { accessorKey: "StatusString", header: "Status" },
@@ -153,20 +153,36 @@ const Index = () => {
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
           <MaterialReactTable
-          columns={columns}
-          data={data}
-          enableColumnResizing
-          enableSorting
-          enablePagination
-          enableRowSelection
-          enableGrouping // Enable grouping feature
-          initialState={{
-            density: 'compact', // Set default density to compact
-            expanded: true, // Expand all grouped rows by default (if grouped)
-          }}
-          enableColumnActions // Enable column actions menu
-          enableColumnFilters // Enable column filters
-        />
+  columns={columns}
+  data={data}
+  enableColumnResizing
+  enableSorting
+  enablePagination
+  enableRowSelection
+  enableGrouping // Enable grouping feature
+  initialState={{
+    density: 'comfortable', // Set default density to comfortable
+  }}
+  enableColumnActions // Enable column actions menu
+  enableColumnFilters // Enable column filters
+  renderDetailPanel={({ row }:any) => (
+    <div
+      style={{
+        padding: '16px',
+        backgroundColor: '#f9f9f9',
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+      }}
+    >
+      <h4>Job Description</h4>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: row.original.Note || 'No description available.',
+        }}
+      />
+    </div>
+  )}
+/>
         )}
       </div>
     </div>
