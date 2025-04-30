@@ -37,16 +37,16 @@ const Index = () => {
         headers: myHeaders,
         redirect: "follow",
       };
-      const response = await fetch(
+      const response: any = await fetch(
         "https://api.theartemis.ai/api/allvms/dumpByVMS/AHSA",
         requestOptions
       );
 
-      const secondResponse = await fetch(
+      const secondResponse: any = await fetch(
         "https://api.theartemis.ai/api/allvms/dumpByVMS/StaffingEngine",
         requestOptions
       );
-      const secondResult = await secondResponse.json();
+      const secondResult: any = await secondResponse.json();
       // console.log("Second API Response:", secondResult); // Log the second API response to the console
       const result = await response.json();
 
