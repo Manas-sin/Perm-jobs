@@ -37,50 +37,55 @@ const Index = () => {
         headers: myHeaders,
         redirect: "follow",
       };
-      const response: any = await fetch(
+  
+      const response = await fetch(
         "https://api.theartemis.ai/api/allvms/dumpByVMS/AHSA",
         requestOptions
       );
-
-      const secondResponse: any = await fetch(
+      const secondResponse = await fetch(
         "https://api.theartemis.ai/api/allvms/dumpByVMS/StaffingEngine",
         requestOptions
       );
-      const secondResult: any = await secondResponse.json();
-      // console.log("Second API Response:", secondResult); // Log the second API response to the console
+      const thirdResponse = await fetch(
+        "https://api.theartemis.ai/api/allvms/dumpByVMS/Focusone",
+        requestOptions
+      );
+  
+      if (!thirdResponse.ok) {
+        console.error("Error fetching third API:", thirdResponse.statusText);
+        return;
+      }
+  
       const result = await response.json();
-
-      // console.log("API Response:", result); // Log the API response to the console
+      const secondResult = await secondResponse.json();
+      const thirdResult = await thirdResponse.json();
+  
+      console.log("Third API Response:", thirdResult); // Debug third API response
+  
       const filteredData = result[0].filter(
         (item: JobData) => item.WorkType === "Perm"
       );
-      const secondfilteredData = secondResult[0].filter(
+      const secondFilteredData = secondResult[0].filter(
         (item: JobData) => item.WorkType === "Permanent"
       );
-
-      const combinedData = [...filteredData, ...secondfilteredData]; // Combine the two filtered data arrays
-      console.log("Combined Data:", combinedData); // Log the combined data to the console
-      // console.log("Filtered Data:", filteredData); // Log the filtered data to the console
-      setData(combinedData); // Update state with filtered data
-      setLoading(false); // Set loading to false
-      // .then((response) => response.json())
-      // .then((result) => {
-      //   // Filter the data to include only items with WorkType === "Perm"
-      //   const filteredData = result.filter(
-      //     (item: JobData) => item.WorkType === "Perm"
-      //   );
-      //   console.log("Filtered Data:", filteredData); // Log the filtered data to the console
-
-      //   setData(filteredData); // Update state with filtered data
-      //   setLoading(false); // Set loading to false
-      // })
-      // .catch((error) => {
-      //   console.error("Error fetching data:", error);
-      //   setLoading(false); // Set loading to false even if there's an error
-      // });
+      const thirdFilteredData = Array.isArray(thirdResult[0])
+        ? thirdResult[0].filter((item: JobData) => item.WorkType === "Direct Hire")
+        : [];
+  
+      console.log("Filtered Data from Third API:", thirdFilteredData); // Debug filtered data
+  
+      const combinedData = [
+        ...filteredData,
+        ...secondFilteredData,
+        ...thirdFilteredData,
+      ];
+  
+      console.log("Combined Data:", combinedData); // Debug combined data
+      setData(combinedData);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setLoading(false); // Set loading to false even if there's an error
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -90,7 +95,6 @@ const Index = () => {
   // Updated columns definition with all required fields
   const columns = useMemo<MRT_ColumnDef<JobData>[]>(
     () => [
-     
       { accessorKey: "WorkType", header: "Type" },
       { accessorKey: "SourceName", header: "VMS" },
       { accessorKey: "StatusString", header: "Status" },
@@ -104,26 +108,32 @@ const Index = () => {
       { accessorKey: "Shift", header: "Shift" },
       { accessorKey: "DurationWeeks", header: "Weeks" },
       { accessorKey: "BillRate", header: "Bill Rate" },
-      { 
-        accessorKey: "StartDate", 
+      {
+        accessorKey: "StartDate",
         header: "Start Date",
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           if (!value) return " "; // Handle empty or invalid dates
           const date = new Date(value);
           if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid date strings
-          return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
+          return `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date
+            .getDate()
+            .toString()
+            .padStart(2, "0")}/${date.getFullYear().toString().slice(-2)}`;
         },
       },
-      { 
-        accessorKey: "EndDate", 
+      {
+        accessorKey: "EndDate",
         header: "End Date",
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           if (!value) return " "; // Handle empty or invalid dates
           const date = new Date(value);
           if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid date strings
-          return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
+          return `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date
+            .getDate()
+            .toString()
+            .padStart(2, "0")}/${date.getFullYear().toString().slice(-2)}`;
         },
       },
     ],
@@ -153,36 +163,36 @@ const Index = () => {
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
           <MaterialReactTable
-  columns={columns}
-  data={data}
-  enableColumnResizing
-  enableSorting
-  enablePagination
-  enableRowSelection
-  enableGrouping // Enable grouping feature
-  initialState={{
-    density: 'comfortable', // Set default density to comfortable
-  }}
-  enableColumnActions // Enable column actions menu
-  enableColumnFilters // Enable column filters
-  renderDetailPanel={({ row }:any) => (
-    <div
-      style={{
-        padding: '16px',
-        backgroundColor: '#f9f9f9',
-        border: '1px solid #ddd',
-        borderRadius: '4px',
-      }}
-    >
-      <h4>Job Description</h4>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: row.original.Note || 'No description available.',
-        }}
-      />
-    </div>
-  )}
-/>
+            columns={columns}
+            data={data}
+            enableColumnResizing
+            enableSorting
+            enablePagination
+            enableRowSelection
+            enableGrouping // Enable grouping feature
+            initialState={{
+              density: "comfortable", // Set default density to comfortable
+            }}
+            enableColumnActions // Enable column actions menu
+            enableColumnFilters // Enable column filters
+            renderDetailPanel={({ row }: any) => (
+              <div
+                style={{
+                  padding: "16px",
+                  backgroundColor: "#f9f9f9",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                }}
+              >
+                <h4>Job Description</h4>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: row.original.Note || "No description available.",
+                  }}
+                />
+              </div>
+            )}
+          />
         )}
       </div>
     </div>
