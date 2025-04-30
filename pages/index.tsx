@@ -105,10 +105,13 @@ const Index = () => {
       { accessorKey: "DurationWeeks", header: "Weeks" },
       { accessorKey: "BillRate", header: "Bill Rate" },
       { 
-        accessorKey: "startDate", 
+        accessorKey: "StartDate", 
         header: "Start Date",
         Cell: ({ cell }) => {
-          const date = new Date(cell.getValue<string>());
+          const value = cell.getValue<string>();
+          if (!value) return " "; // Handle empty or invalid dates
+          const date = new Date(value);
+          if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid date strings
           return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
         },
       },
@@ -116,7 +119,10 @@ const Index = () => {
         accessorKey: "EndDate", 
         header: "End Date",
         Cell: ({ cell }) => {
-          const date = new Date(cell.getValue<string>());
+          const value = cell.getValue<string>();
+          if (!value) return " "; // Handle empty or invalid dates
+          const date = new Date(value);
+          if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid date strings
           return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
         },
       },
