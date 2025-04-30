@@ -89,25 +89,103 @@ const Index = () => {
     }
   };
   useEffect(() => {
-    fetchData(); // Call the fetchData function
+    fetchData(); 
   }, []);
 
   // Updated columns definition with all required fields
   const columns = useMemo<MRT_ColumnDef<JobData>[]>(
     () => [
-      { accessorKey: "WorkType", header: "Type" },
-      { accessorKey: "SourceName", header: "VMS" },
-      { accessorKey: "StatusString", header: "Status" },
-      { accessorKey: "Positions", header: "Open Position" },
-      { accessorKey: "Degree", header: "Profession" },
-      { accessorKey: "JobSpecialty", header: "Speciality" },
-      { accessorKey: "Facility", header: "Facility" },
-      { accessorKey: "Address", header: "Facility Address" },
-      { accessorKey: "City", header: "City" },
-      { accessorKey: "State", header: "State" },
-      { accessorKey: "Shift", header: "Shift" },
-      { accessorKey: "DurationWeeks", header: "Weeks" },
-      { accessorKey: "BillRate", header: "Bill Rate" },
+      {
+        accessorKey: "WorkType",
+        header: "Type",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 90,
+      },
+      {
+        accessorKey: "SourceName",
+        header: "VMS",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 90,
+      },
+      {
+        accessorKey: "StatusString",
+        header: "Status",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 90,
+      },
+      {
+        accessorKey: "Positions",
+        header: "Open Position",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 90,
+      },
+      {
+        accessorKey: "Degree",
+        header: "Profession",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 90,
+      },
+      {
+        accessorKey: "JobSpecialty",
+        header: "Speciality",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+          size: 150,
+      },
+      {
+        accessorKey: "Facility",
+        header: "Facility",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+          size: 150,
+      },
+      {
+        accessorKey: "Address",
+        header: "Facility Address",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 150,
+      },
+      {
+        accessorKey: "City",
+        header: "City",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 150,
+      },
+      {
+        accessorKey: "State",
+        header: "State",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+        size: 100,
+      },
+      {
+        accessorKey: "Shift",
+        header: "Shift",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+          size: 150,
+      },
+      {
+        accessorKey: "DurationWeeks",
+        header: "Weeks",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+          size: 100,
+      },
+      {
+        accessorKey: "BillRate",
+        header: "Bill Rate",
+        enableClickToCopy: true,
+        filterVariant: "autocomplete",
+          size: 90,
+      },
       {
         accessorKey: "StartDate",
         header: "Start Date",
@@ -139,6 +217,8 @@ const Index = () => {
     ],
     []
   );
+  
+ 
 
   return (
     <div
@@ -152,7 +232,6 @@ const Index = () => {
       <div
         style={{
           width: "100%",
-
           backgroundColor: "#ffffff",
           padding: "20px",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -163,36 +242,49 @@ const Index = () => {
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
           <MaterialReactTable
-            columns={columns}
-            data={data}
-            enableColumnResizing
-            enableSorting
-            enablePagination
-            enableRowSelection
-            enableGrouping // Enable grouping feature
-            initialState={{
-              density: "comfortable", // Set default density to comfortable
-            }}
-            enableColumnActions // Enable column actions menu
-            enableColumnFilters // Enable column filters
-            renderDetailPanel={({ row }: any) => (
+          columns={columns}
+          data={data}
+          enableSorting
+          enablePagination
+          enableRowSelection
+          enableGrouping // Enable grouping feature
+          initialState={{
+            density: "compact", // Set default density to comfortable
+          }}
+          enableColumnActions // Enable column actions menu
+          enableColumnFilters // Enable column filters
+          enableColumnDragging={false} // Disable column dragging
+          enableColumnResizing // Enable column resizing
+          muiTableHeadCellProps={{
+            style: {
+              padding: "1px", // Add padding to the header cells
+              textAlign: "center", // Center-align the text for better readability
+            },
+          }}
+          muiTableBodyCellProps={{
+            style: {
+              padding: "1px", // Add padding to the body cells
+              textAlign: "center",
+            },
+          }}
+          renderDetailPanel={({ row }: any) => (
+            <div
+              style={{
+               
+                backgroundColor: "#f9f9f9",
+                border: "1px solid #ddd",
+                borderRadius: "1px",
+              }}
+            >
+              <h4>Job Description</h4>
               <div
-                style={{
-                  padding: "16px",
-                  backgroundColor: "#f9f9f9",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
+                dangerouslySetInnerHTML={{
+                  __html: row.original.Note || "No description available.",
                 }}
-              >
-                <h4>Job Description</h4>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: row.original.Note || "No description available.",
-                  }}
-                />
-              </div>
-            )}
-          />
+              />
+            </div>
+          )}
+        />
         )}
       </div>
     </div>
