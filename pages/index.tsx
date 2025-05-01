@@ -3,8 +3,10 @@ import { MaterialReactTable } from "material-react-table";
 import type { MRT_ColumnDef } from "material-react-table";
 import { Box } from "@mui/material";
 import { Button, Tooltip } from "@mui/material";
+import { Grid, GridProps } from "@mui/material";
 
-// Updated JobData type to include all required fields
+import moment from "moment";
+
 type JobData = {
   assignee: string;
   assigner: string;
@@ -22,13 +24,28 @@ type JobData = {
   billrate: number;
   startDate: string;
   endDate: string;
+  CustomField5?: string;
+  AutoOffer_Fl?: boolean;
+  HotFL?: boolean;
+  Note?: string;
+  SourceName?: string;
+  Positions?: number;
+  Degree?: string;
+  JobSpecialty?: string;
+  Facility?: string;
+  Address?: string;
+  City?: string;
+  State?: string;
+  Shift?: string;
+  DurationWeeks?: number;
+  BillRate?: number;
+  StartDate?: string;
+  EndDate?: string;
 };
 
 const Index = () => {
-  const [data, setData] = useState<JobData[]>([]); // State to hold API data
-  const [loading, setLoading] = useState<boolean>(true); // State to handle loading
-  console.log("Data:", data); // Log the data to the console
-  // Fetch data from the API
+  const [data, setData] = useState<JobData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchData = async () => {
     try {
@@ -62,8 +79,6 @@ const Index = () => {
       const secondResult = await secondResponse.json();
       const thirdResult = await thirdResponse.json();
 
-      console.log("Third API Response:", thirdResult); // Debug third API response
-
       const filteredData = result[0].filter(
         (item: JobData) => item.WorkType === "Perm"
       );
@@ -76,15 +91,12 @@ const Index = () => {
           )
         : [];
 
-      console.log("Filtered Data from Third API:", thirdFilteredData); // Debug filtered data
-
       const combinedData = [
         ...filteredData,
         ...secondFilteredData,
         ...thirdFilteredData,
       ];
-
-      console.log("Combined Data:", combinedData); // Debug combined data
+console.log("Combined Data:", combinedData);
       setData(combinedData);
       setLoading(false);
     } catch (error) {
@@ -92,20 +104,20 @@ const Index = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Updated columns definition with all required fields
   const columns = useMemo<MRT_ColumnDef<JobData>[]>(
     () => [
       {
-        accessorFn: (row) => `${row.SourceID}`, //accessorFn used to join multiple data into a single cell
-        id: "SourceID", //id is still required when using accessorFn instead of accessorKey
+        accessorFn: (row) => `${row.SourceID}`,
+        id: "SourceID",
         header: "Job-Id",
         enableClickToCopy: true,
         enableHiding: true,
-        enableColumnPinning: true, // Enable pinning for this column
+        enableColumnPinning: true,
         enableColumnActions: true,
         size: 95,
         Cell: ({ renderedCellValue, row }: any) => (
@@ -139,12 +151,11 @@ const Index = () => {
         size: 90,
       },
       {
-        accessorKey: "StatusString", //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
+        accessorKey: "StatusString",
         enableClickToCopy: true,
-        // filterVariant: "autocomplete",
         filterVariant: "multi-select",
         enableHiding: true,
-        enableColumnPinning: true, // Enable pinning for this column
+        enableColumnPinning: true,
         enableColumnActions: true,
         header: "Status",
         size: 170,
@@ -170,18 +181,17 @@ const Index = () => {
                     : cell.getValue() === "Temp Block"
                     ? "#0000ff"
                     : theme.palette.success.main,
-                borderRadius: ".5rem", // Rounded corners
-                color: "rgb(255, 255, 255)", // White text color
-                fontSize: "12px", // Font size
-                height: "25px", // Fixed height
-                padding: "0.25rem", // Padding
-                textAlign: "center", // Center-align text
-                display: "flex", // Flexbox for centering content
-                alignItems: "center", // Vertically center content
-                justifyContent: "center", // Horizontally center content
+                borderRadius: ".5rem",
+                color: "rgb(255, 255, 255)",
+                fontSize: "12px",
+                height: "25px",
+                padding: "0.25rem",
+                textAlign: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               })}
             >
-              {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
               <Tooltip title={renderedCellValue}>
                 <span>
                   {renderedCellValue === "O" ? "Open" : renderedCellValue}
@@ -293,9 +303,9 @@ const Index = () => {
         header: "Start Date",
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          if (!value) return " "; // Handle empty or invalid dates
+          if (!value) return " ";
           const date = new Date(value);
-          if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid date strings
+          if (isNaN(date.getTime())) return "Invalid Date";
           return `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date
             .getDate()
             .toString()
@@ -307,9 +317,9 @@ const Index = () => {
         header: "End Date",
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          if (!value) return " "; // Handle empty or invalid dates
+          if (!value) return " ";
           const date = new Date(value);
-          if (isNaN(date.getTime())) return "Invalid Date"; // Handle invalid date strings
+          if (isNaN(date.getTime())) return "Invalid Date";
           return `${(date.getMonth() + 1).toString().padStart(2, "0")}/${date
             .getDate()
             .toString()
@@ -326,10 +336,10 @@ const Index = () => {
         display: "flex",
         height: "100vh",
         backgroundColor: "#ffffff",
-        fontFamily: "Segoe UI", // Apply font family globally
-        fontSize: "0.8rem", // Make font size smaller globally
-        overflowX: "hidden", // Prevent horizontal overflow
-        overflowY: "auto", // Allow vertical scrolling
+        fontFamily: "Segoe UI",
+        fontSize: "0.8rem",
+        overflowX: "hidden",
+        overflowY: "auto",
       }}
     >
       <div
@@ -340,7 +350,15 @@ const Index = () => {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <h2 style={{ textAlign: "center" ,fontFamily:"monospace",fontSize:"1.5rem",}}>Permanent Jobs</h2>
+        <h2
+          style={{
+            textAlign: "center",
+            fontFamily: "monospace",
+            fontSize: "1.5rem",
+          }}
+        >
+          Permanent Jobs
+        </h2>
         {loading ? (
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
@@ -353,18 +371,23 @@ const Index = () => {
             enableGrouping
             initialState={{
               density: "compact",
+              pagination: { pageSize: 10, pageIndex: 0 },
+            }}
+            muiPaginationProps={{
+              rowsPerPageOptions: [10, 20, 50, 100],
+              showFirstButton: true,
+              showLastButton: true,
             }}
             enableColumnActions
             enableColumnFilters
             enableColumnDragging={false}
             enableColumnResizing
-            // Add grid lines to the entire table
             muiTableProps={{
               sx: {
-                border: "0.1px solid rgba(224, 224, 224, 1)", // Outer border
+                border: "0.1px solid rgba(224, 224, 224, 1)",
                 "& .MuiTableCell-root": {
                   fontSize: "0.75rem",
-                  border: "1px solid rgba(224, 224, 224, 0.5)", // Cell borders
+                  border: "1px solid rgba(224, 224, 224, 0.5)",
                 },
               },
             }}
@@ -373,25 +396,20 @@ const Index = () => {
                 fontSize: "0.75rem",
                 padding: "1px",
                 fontWeight: "bold",
-                border: "0.1px solid rgba(224, 224, 224, 0.5)", // Header cell borders
-                backgroundColor: "#f5f5f5", // Light gray background for headers
+                border: "0.1px solid rgba(224, 224, 224, 0.5)",
+                backgroundColor: "#f5f5f5",
               },
             }}
             muiTableBodyCellProps={{
               sx: {
                 fontSize: "0.75rem",
                 padding: "1px",
-                border: "0.1px solid rgba(224, 224, 224, 0.5)", // Body cell borders
+                border: "0.1px solid rgba(224, 224, 224, 0.5)",
               },
             }}
             muiTableContainerProps={{
               sx: {
-                border: "1px solid rgba(224, 224, 224, 1)", // Container border
-              },
-            }}
-            muiPaginationProps={{
-              sx: {
-                fontSize: "0.75rem",
+                border: "1px solid rgba(224, 224, 224, 1)",
               },
             }}
             muiTopToolbarProps={{
@@ -414,20 +432,381 @@ const Index = () => {
               <div
                 style={{
                   backgroundColor: "#f9f9f9",
-                  border: "0.1px solid #ddd",
-                  borderRadius: "1px",
-                  fontFamily: "Segoe UI",
-                  fontWeight: "bold",
-                  fontSize: "0.75rem",
-                  padding: "1px",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "8px",
+                  fontFamily: "Segoe UI, sans-serif",
+                  padding: "20px",
+                  marginBottom: "20px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
                 }}
               >
-                <h4 style={{ fontSize: "0.875rem" }}>Job Description</h4>
+                <h4 style={{ 
+                  fontSize: "1rem",
+                  marginBottom: "20px",
+                  color: "#333",
+                  borderBottom: "1px solid #e0e0e0",
+                  paddingBottom: "8px"
+                }}>
+                  Job Description
+                </h4>
+                
                 <div
                   dangerouslySetInnerHTML={{
                     __html: row.original.Note || "No description available.",
                   }}
+                  style={{ 
+                    marginBottom: "20px",
+                    lineHeight: "1.5",
+                    color: "#444"
+                  }}
                 />
+                
+                <div style={{ 
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: "50px",
+                
+                }}>
+                  {/* Column 1 */}
+                  <div>
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job-ID</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.SourceID}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.SourceID || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job-Title</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.Title}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.Title || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Type</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.WorkType}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={
+                              row.original.WorkType == "1" ? "Travel" :
+                              row.original.WorkType == "2" ? "Perm" :
+                              row.original.WorkType == "3" ? "Per Diem" :
+                              row.original.WorkType || "NA"
+                            }
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Status</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.StatusString}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.StatusString || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Profession</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.Degree}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.Degree || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Speciality</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.JobSpecialty}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.JobSpecialty || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Facility</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.Facility}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.Facility || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+                    <div className="job-field">
+                    <div className="job-label">
+                      <label>Job Guaranteed Hours</label>
+                    </div>
+                    <div className="job-value">
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={row.original.GuaranteedHours || "NA"}
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  </div>
+            
+                  {/* Column 2 */}
+                  <div>
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job City</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.City}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.City || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job State</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.State}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.State || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job On Call Rate</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={`$ ${row.original.OnCallRate || "NA"}`}
+                          disabled
+                        />
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Bill Rate</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={`$ ${row.original.BillRate || "NA"}`}
+                          disabled
+                        />
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>VMS Name</label>
+                      </div>
+                      <div className="job-value">
+                        <Tooltip title={row.original.SourceName}>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={row.original.SourceName || "NA"}
+                            disabled
+                          />
+                        </Tooltip>
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Start Date</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          className="form-control"
+                          value={
+                            moment(row.original.FormattedStartDate).format("MM-DD-YYYY") === "Invalid date" 
+                              ? "NA" 
+                              : moment(row.original.FormattedStartDate).format("MM-DD-YYYY") || "NA"
+                          }
+                          disabled
+                        />
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job End Date</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          className="form-control"
+                          value={
+                            moment(row.original.EndDate).format("MM-DD-YYYY") === "Invalid date" 
+                              ? "NA" 
+                              : moment(row.original.EndDate).format("MM-DD-YYYY") || "NA"
+                          }
+                          disabled
+                        />
+                      </div>
+                    </div>
+            
+                    <div className="job-field">
+                      <div className="job-label">
+                        <label>Job Posted On</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          className="form-control"
+                          value={
+                            moment(row.original.PostDate).format("MM-DD-YYYY") === "Invalid date" 
+                              ? "NA" 
+                              : moment(row.original.PostDate).format("MM-DD-YYYY") || "NA"
+                          }
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <div className="job-field">
+                    <div className="job-label">
+                      <label>Job Bonus</label>
+                    </div>
+                    <div className="job-value">
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={`$ ${row.original.Bonus || "NA"}`}
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  </div>
+                </div>
+            
+                {/* Bottom row - full width */}
+                <div style={{ 
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: "24px",
+                  marginTop: "16px"
+                }}>
+                 
+            
+                  
+                </div>
+                
+                <style jsx>{`
+                  .job-field {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 12px;
+                  }
+                  
+                  .job-label {
+                    width: 140px;
+                    font-weight: 600;
+                    color: #555;
+                    flex-shrink: 0;
+                  }
+                  
+                  .job-value {
+                    flex: 1;
+                  }
+                  
+                  .form-control {
+                    width: 100%;
+                    padding: 8px 12px;
+                    font-size: 0.875rem;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    background-color: #fff;
+                    color: #333;
+                  }
+                  
+                  .form-control:disabled {
+                    background-color: #f5f5f5;
+                    cursor: not-allowed;
+                    opacity: 1;
+                  }
+                  
+                  @media (max-width: 768px) {
+                    .job-field {
+                      flex-direction: column;
+                      align-items: flex-start;
+                    }
+                    
+                    .job-label {
+                      width: 100%;
+                      margin-bottom: 4px;
+                    }
+                    
+                    .job-value {
+                      width: 100%;
+                    }
+                  }
+                `}</style>
               </div>
             )}
           />
