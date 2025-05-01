@@ -328,6 +328,8 @@ const Index = () => {
         backgroundColor: "#ffffff",
         fontFamily: "Segoe UI", // Apply font family globally
         fontSize: "0.8rem", // Make font size smaller globally
+        overflowX: "hidden", // Prevent horizontal overflow
+        overflowY: "auto", // Allow vertical scrolling
       }}
     >
       <div
