@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { MaterialReactTable } from "material-react-table";
 import type { MRT_ColumnDef } from "material-react-table";
+import { Box } from "@mui/material";
 
 // Updated JobData type to include all required fields
 type JobData = {
@@ -37,7 +38,7 @@ const Index = () => {
         headers: myHeaders,
         redirect: "follow",
       };
-  
+
       const response = await fetch(
         "https://api.theartemis.ai/api/allvms/dumpByVMS/AHSA",
         requestOptions
@@ -50,18 +51,18 @@ const Index = () => {
         "https://api.theartemis.ai/api/allvms/dumpByVMS/Focusone",
         requestOptions
       );
-  
+
       if (!thirdResponse.ok) {
         console.error("Error fetching third API:", thirdResponse.statusText);
         return;
       }
-  
+
       const result = await response.json();
       const secondResult = await secondResponse.json();
       const thirdResult = await thirdResponse.json();
-  
+
       console.log("Third API Response:", thirdResult); // Debug third API response
-  
+
       const filteredData = result[0].filter(
         (item: JobData) => item.WorkType === "Perm"
       );
@@ -69,17 +70,19 @@ const Index = () => {
         (item: JobData) => item.WorkType === "Permanent"
       );
       const thirdFilteredData = Array.isArray(thirdResult[0])
-        ? thirdResult[0].filter((item: JobData) => item.WorkType === "Direct Hire")
+        ? thirdResult[0].filter(
+            (item: JobData) => item.WorkType === "Direct Hire"
+          )
         : [];
-  
+
       console.log("Filtered Data from Third API:", thirdFilteredData); // Debug filtered data
-  
+
       const combinedData = [
         ...filteredData,
         ...secondFilteredData,
         ...thirdFilteredData,
       ];
-  
+
       console.log("Combined Data:", combinedData); // Debug combined data
       setData(combinedData);
       setLoading(false);
@@ -89,7 +92,7 @@ const Index = () => {
     }
   };
   useEffect(() => {
-    fetchData(); 
+    fetchData();
   }, []);
 
   // Updated columns definition with all required fields
@@ -115,6 +118,31 @@ const Index = () => {
         enableClickToCopy: true,
         filterVariant: "autocomplete",
         size: 90,
+        Cell: ({ renderedCellValue, cell }: any) => (
+          <Box
+            sx={(theme) => ({
+              backgroundColor:
+                cell.getValue() === "Closed"
+                  ? theme.palette.error.dark
+                  : ["Cancelled", "Frozen"].includes(cell.getValue())
+                  ? theme.palette.warning.dark
+                  : cell.getValue() === "OnHold"
+                  ? theme.palette.warning.light
+                  : theme.palette.success.dark,
+              borderRadius: ".5rem", // Rounded corners
+              color: "rgb(255, 255, 255)", // White text color
+              fontSize: "12px", // Font size
+              height: "25px", // Fixed height
+              padding: "0.25rem", // Padding
+              textAlign: "center", // Center-align text
+              display: "flex", // Flexbox for centering content
+              alignItems: "center", // Vertically center content
+              justifyContent: "center", // Horizontally center content
+            })}
+          >
+            {renderedCellValue}
+          </Box>
+        ),
       },
       {
         accessorKey: "Positions",
@@ -135,14 +163,14 @@ const Index = () => {
         header: "Speciality",
         enableClickToCopy: true,
         filterVariant: "autocomplete",
-          size: 150,
+        size: 150,
       },
       {
         accessorKey: "Facility",
         header: "Facility",
         enableClickToCopy: true,
         filterVariant: "autocomplete",
-          size: 150,
+        size: 150,
       },
       {
         accessorKey: "Address",
@@ -170,21 +198,21 @@ const Index = () => {
         header: "Shift",
         enableClickToCopy: true,
         filterVariant: "autocomplete",
-          size: 150,
+        size: 150,
       },
       {
         accessorKey: "DurationWeeks",
         header: "Weeks",
         enableClickToCopy: true,
         filterVariant: "autocomplete",
-          size: 100,
+        size: 100,
       },
       {
         accessorKey: "BillRate",
         header: "Bill Rate",
         enableClickToCopy: true,
         filterVariant: "autocomplete",
-          size: 90,
+        size: 90,
       },
       {
         accessorKey: "StartDate",
@@ -217,16 +245,15 @@ const Index = () => {
     ],
     []
   );
-  
- 
 
   return (
     <div
       style={{
         display: "flex",
-
         height: "100vh",
         backgroundColor: "#ffffff",
+        fontFamily: "Segoe UI", // Apply font family globally
+        fontSize: "0.8rem", // Make font size smaller globally
       }}
     >
       <div
@@ -242,49 +269,92 @@ const Index = () => {
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
           <MaterialReactTable
-          columns={columns}
-          data={data}
-          enableSorting
-          enablePagination
-          enableRowSelection
-          enableGrouping // Enable grouping feature
-          initialState={{
-            density: "compact", // Set default density to comfortable
-          }}
-          enableColumnActions // Enable column actions menu
-          enableColumnFilters // Enable column filters
-          enableColumnDragging={false} // Disable column dragging
-          enableColumnResizing // Enable column resizing
-          muiTableHeadCellProps={{
-            style: {
-              padding: "1px", // Add padding to the header cells
-              textAlign: "center", // Center-align the text for better readability
-            },
-          }}
-          muiTableBodyCellProps={{
-            style: {
-              padding: "1px", // Add padding to the body cells
-              textAlign: "center",
-            },
-          }}
-          renderDetailPanel={({ row }: any) => (
-            <div
-              style={{
-               
-                backgroundColor: "#f9f9f9",
-                border: "1px solid #ddd",
-                borderRadius: "1px",
-              }}
-            >
-              <h4>Job Description</h4>
+            columns={columns}
+            data={data}
+            enableSorting
+            enablePagination
+            enableRowSelection
+            enableGrouping
+            initialState={{
+              density: "compact",
+            }}
+            enableColumnActions
+            enableColumnFilters
+            enableColumnDragging={false}
+            enableColumnResizing
+            // Add grid lines to the entire table
+            muiTableProps={{
+              sx: {
+                border: "0.1px solid rgba(224, 224, 224, 1)", // Outer border
+                "& .MuiTableCell-root": {
+                  fontSize: "0.75rem",
+                  border: "1px solid rgba(224, 224, 224, 0.5)", // Cell borders
+                },
+              },
+            }}
+            muiTableHeadCellProps={{
+              sx: {
+                fontSize: "0.75rem",
+                padding: "1px",
+                fontWeight: "bold",
+                border: "0.1px solid rgba(224, 224, 224, 0.5)", // Header cell borders
+                backgroundColor: "#f5f5f5", // Light gray background for headers
+              },
+            }}
+            muiTableBodyCellProps={{
+              sx: {
+                fontSize: "0.75rem",
+                padding: "1px",
+                border: "0.1px solid rgba(224, 224, 224, 0.5)", // Body cell borders
+              },
+            }}
+            muiTableContainerProps={{
+              sx: {
+                border: "1px solid rgba(224, 224, 224, 1)", // Container border
+              },
+            }}
+            muiPaginationProps={{
+              sx: {
+                fontSize: "0.75rem",
+              },
+            }}
+            muiTopToolbarProps={{
+              sx: {
+                fontSize: "0.75rem",
+                "& .MuiButton-root": {
+                  fontSize: "0.75rem",
+                },
+              },
+            }}
+            muiBottomToolbarProps={{
+              sx: {
+                fontSize: "0.75rem",
+                "& .MuiButton-root": {
+                  fontSize: "0.75rem",
+                },
+              },
+            }}
+            renderDetailPanel={({ row }: any) => (
               <div
-                dangerouslySetInnerHTML={{
-                  __html: row.original.Note || "No description available.",
+                style={{
+                  backgroundColor: "#f9f9f9",
+                  border: "0.1px solid #ddd",
+                  borderRadius: "1px",
+                  fontFamily: "Segoe UI",
+                  fontWeight: "bold",
+                  fontSize: "0.75rem",
+                  padding: "1px",
                 }}
-              />
-            </div>
-          )}
-        />
+              >
+                <h4 style={{ fontSize: "0.875rem" }}>Job Description</h4>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: row.original.Note || "No description available.",
+                  }}
+                />
+              </div>
+            )}
+          />
         )}
       </div>
     </div>
