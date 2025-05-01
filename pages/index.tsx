@@ -96,7 +96,7 @@ const Index = () => {
         ...secondFilteredData,
         ...thirdFilteredData,
       ];
-console.log("Combined Data:", combinedData);
+      console.log("Combined Data:", combinedData);
       setData(combinedData);
       setLoading(false);
     } catch (error) {
@@ -437,36 +437,39 @@ console.log("Combined Data:", combinedData);
                   fontFamily: "Segoe UI, sans-serif",
                   padding: "20px",
                   marginBottom: "20px",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
                 }}
               >
-                <h4 style={{ 
-                  fontSize: "1rem",
-                  marginBottom: "20px",
-                  color: "#333",
-                  borderBottom: "1px solid #e0e0e0",
-                  paddingBottom: "8px"
-                }}>
+                <h4
+                  style={{
+                    fontSize: "1rem",
+                    marginBottom: "20px",
+                    color: "#333",
+                    borderBottom: "1px solid #e0e0e0",
+                    paddingBottom: "8px",
+                  }}
+                >
                   Job Description
                 </h4>
-                
+
                 <div
                   dangerouslySetInnerHTML={{
                     __html: row.original.Note || "No description available.",
                   }}
-                  style={{ 
+                  style={{
                     marginBottom: "20px",
                     lineHeight: "1.5",
-                    color: "#444"
+                    color: "#444",
                   }}
                 />
-                
-                <div style={{ 
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: "50px",
-                
-                }}>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "50px",
+                  }}
+                >
                   {/* Column 1 */}
                   <div>
                     <div className="job-field">
@@ -484,7 +487,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job-Title</label>
@@ -500,7 +503,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Type</label>
@@ -511,17 +514,20 @@ console.log("Combined Data:", combinedData);
                             type="text"
                             className="form-control"
                             value={
-                              row.original.WorkType == "1" ? "Travel" :
-                              row.original.WorkType == "2" ? "Perm" :
-                              row.original.WorkType == "3" ? "Per Diem" :
-                              row.original.WorkType || "NA"
+                              row.original.WorkType == "1"
+                                ? "Travel"
+                                : row.original.WorkType == "2"
+                                ? "Perm"
+                                : row.original.WorkType == "3"
+                                ? "Per Diem"
+                                : row.original.WorkType || "NA"
                             }
                             disabled
                           />
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Status</label>
@@ -537,7 +543,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Profession</label>
@@ -553,7 +559,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Speciality</label>
@@ -569,7 +575,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Facility</label>
@@ -586,20 +592,20 @@ console.log("Combined Data:", combinedData);
                       </div>
                     </div>
                     <div className="job-field">
-                    <div className="job-label">
-                      <label>Job Guaranteed Hours</label>
-                    </div>
-                    <div className="job-value">
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={row.original.GuaranteedHours || "NA"}
-                        disabled
-                      />
+                      <div className="job-label">
+                        <label>Job Guaranteed Hours</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={row.original.GuaranteedHours || "NA"}
+                          disabled
+                        />
+                      </div>
                     </div>
                   </div>
-                  </div>
-            
+
                   {/* Column 2 */}
                   <div>
                     <div className="job-field">
@@ -617,7 +623,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job State</label>
@@ -633,7 +639,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job On Call Rate</label>
@@ -647,7 +653,7 @@ console.log("Combined Data:", combinedData);
                         />
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Bill Rate</label>
@@ -661,7 +667,7 @@ console.log("Combined Data:", combinedData);
                         />
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>VMS Name</label>
@@ -677,7 +683,7 @@ console.log("Combined Data:", combinedData);
                         </Tooltip>
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Start Date</label>
@@ -686,15 +692,19 @@ console.log("Combined Data:", combinedData);
                         <input
                           className="form-control"
                           value={
-                            moment(row.original.FormattedStartDate).format("MM-DD-YYYY") === "Invalid date" 
-                              ? "NA" 
-                              : moment(row.original.FormattedStartDate).format("MM-DD-YYYY") || "NA"
+                            moment(row.original.FormattedStartDate).format(
+                              "MM-DD-YYYY"
+                            ) === "Invalid date"
+                              ? "NA"
+                              : moment(row.original.FormattedStartDate).format(
+                                  "MM-DD-YYYY"
+                                ) || "NA"
                           }
                           disabled
                         />
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job End Date</label>
@@ -703,15 +713,19 @@ console.log("Combined Data:", combinedData);
                         <input
                           className="form-control"
                           value={
-                            moment(row.original.EndDate).format("MM-DD-YYYY") === "Invalid date" 
-                              ? "NA" 
-                              : moment(row.original.EndDate).format("MM-DD-YYYY") || "NA"
+                            moment(row.original.EndDate).format(
+                              "MM-DD-YYYY"
+                            ) === "Invalid date"
+                              ? "NA"
+                              : moment(row.original.EndDate).format(
+                                  "MM-DD-YYYY"
+                                ) || "NA"
                           }
                           disabled
                         />
                       </div>
                     </div>
-            
+
                     <div className="job-field">
                       <div className="job-label">
                         <label>Job Posted On</label>
@@ -720,9 +734,13 @@ console.log("Combined Data:", combinedData);
                         <input
                           className="form-control"
                           value={
-                            moment(row.original.PostDate).format("MM-DD-YYYY") === "Invalid date" 
-                              ? "NA" 
-                              : moment(row.original.PostDate).format("MM-DD-YYYY") || "NA"
+                            moment(row.original.PostDate).format(
+                              "MM-DD-YYYY"
+                            ) === "Invalid date"
+                              ? "NA"
+                              : moment(row.original.PostDate).format(
+                                  "MM-DD-YYYY"
+                                ) || "NA"
                           }
                           disabled
                         />
@@ -730,51 +748,49 @@ console.log("Combined Data:", combinedData);
                     </div>
 
                     <div className="job-field">
-                    <div className="job-label">
-                      <label>Job Bonus</label>
+                      <div className="job-label">
+                        <label>Job Bonus</label>
+                      </div>
+                      <div className="job-value">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={`$ ${row.original.Bonus || "NA"}`}
+                          disabled
+                        />
+                      </div>
                     </div>
-                    <div className="job-value">
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={`$ ${row.original.Bonus || "NA"}`}
-                        disabled
-                      />
-                    </div>
-                  </div>
                   </div>
                 </div>
-            
+
                 {/* Bottom row - full width */}
-                <div style={{ 
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: "24px",
-                  marginTop: "16px"
-                }}>
-                 
-            
-                  
-                </div>
-                
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "24px",
+                    marginTop: "16px",
+                  }}
+                ></div>
+
                 <style jsx>{`
                   .job-field {
                     display: flex;
                     align-items: center;
                     margin-bottom: 12px;
                   }
-                  
+
                   .job-label {
                     width: 140px;
                     font-weight: 600;
                     color: #555;
                     flex-shrink: 0;
                   }
-                  
+
                   .job-value {
                     flex: 1;
                   }
-                  
+
                   .form-control {
                     width: 100%;
                     padding: 8px 12px;
@@ -784,24 +800,24 @@ console.log("Combined Data:", combinedData);
                     background-color: #fff;
                     color: #333;
                   }
-                  
+
                   .form-control:disabled {
                     background-color: #f5f5f5;
                     cursor: not-allowed;
                     opacity: 1;
                   }
-                  
+
                   @media (max-width: 768px) {
                     .job-field {
                       flex-direction: column;
                       align-items: flex-start;
                     }
-                    
+
                     .job-label {
                       width: 100%;
                       margin-bottom: 4px;
                     }
-                    
+
                     .job-value {
                       width: 100%;
                     }
