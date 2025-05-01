@@ -4,6 +4,8 @@ import type { MRT_ColumnDef } from "material-react-table";
 import { Box } from "@mui/material";
 import { Button, Tooltip } from "@mui/material";
 import { Grid, GridProps } from "@mui/material";
+import  Loader3  from "../components/common/Loader3";
+
 
 import moment from "moment";
 
@@ -360,7 +362,9 @@ const Index = () => {
           Permanent Jobs
         </h2>
         {loading ? (
-          <p style={{ textAlign: "center" }}>Loading...</p>
+         <div style={{ textAlign: "center" }}>
+         <Loader3 />
+       </div>
         ) : (
           <MaterialReactTable
             columns={columns}
