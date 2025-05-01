@@ -373,6 +373,7 @@ const Index = () => {
             enablePagination
             enableRowSelection
             enableGrouping
+            enableColumnPinning// Enable pinning feature
             initialState={{
               density: "compact",
               pagination: { pageSize: 10, pageIndex: 0 },
