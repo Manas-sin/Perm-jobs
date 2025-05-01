@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { MaterialReactTable } from "material-react-table";
 import type { MRT_ColumnDef } from "material-react-table";
 import { Box } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 
 // Updated JobData type to include all required fields
 type JobData = {
@@ -99,6 +100,31 @@ const Index = () => {
   const columns = useMemo<MRT_ColumnDef<JobData>[]>(
     () => [
       {
+        accessorFn: (row) => `${row.SourceID}`, //accessorFn used to join multiple data into a single cell
+        id: "SourceID", //id is still required when using accessorFn instead of accessorKey
+        header: "Job-Id",
+        enableClickToCopy: true,
+        enableHiding: true,
+        enableColumnPinning: true, // Enable pinning for this column
+        enableColumnActions: true,
+        size: 95,
+        Cell: ({ renderedCellValue, row }: any) => (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              fontSize: "12px",
+              height: "25px",
+            }}
+          >
+            <Tooltip title={renderedCellValue}>
+              <span>{renderedCellValue}</span>
+            </Tooltip>
+          </Box>
+        ),
+      },
+      {
         accessorKey: "WorkType",
         header: "Type",
         enableClickToCopy: true,
@@ -127,7 +153,7 @@ const Index = () => {
                   : ["Cancelled", "Frozen"].includes(cell.getValue())
                   ? theme.palette.warning.dark
                   : cell.getValue() === "OnHold"
-                  ? theme.palette.warning.light
+                  ? "orange" // Change color to orange for OnHold
                   : theme.palette.success.dark,
               borderRadius: ".5rem", // Rounded corners
               color: "rgb(255, 255, 255)", // White text color
