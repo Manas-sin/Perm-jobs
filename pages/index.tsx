@@ -170,16 +170,16 @@ const Index = () => {
                     : cell.getValue() === "Temp Block"
                     ? "#0000ff"
                     : theme.palette.success.main,
-                    borderRadius: ".5rem", // Rounded corners
-                    color: "rgb(255, 255, 255)", // White text color
-                    fontSize: "12px", // Font size
-                    height: "25px", // Fixed height
-                    padding: "0.25rem", // Padding
-                    textAlign: "center", // Center-align text
-                    display: "flex", // Flexbox for centering content
-                    alignItems: "center", // Vertically center content
-                    justifyContent: "center", // Horizontally center content
-                  })}
+                borderRadius: ".5rem", // Rounded corners
+                color: "rgb(255, 255, 255)", // White text color
+                fontSize: "12px", // Font size
+                height: "25px", // Fixed height
+                padding: "0.25rem", // Padding
+                textAlign: "center", // Center-align text
+                display: "flex", // Flexbox for centering content
+                alignItems: "center", // Vertically center content
+                justifyContent: "center", // Horizontally center content
+              })}
             >
               {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
               <Tooltip title={renderedCellValue}>
@@ -340,7 +340,7 @@ const Index = () => {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <h2 style={{ textAlign: "center" }}>Permanent Jobs</h2>
+        <h2 style={{ textAlign: "center" ,fontFamily:"monospace",fontSize:"1.5rem",}}>Permanent Jobs</h2>
         {loading ? (
           <p style={{ textAlign: "center" }}>Loading...</p>
         ) : (
