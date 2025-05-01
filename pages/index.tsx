@@ -139,35 +139,83 @@ const Index = () => {
         size: 90,
       },
       {
-        accessorKey: "StatusString",
-        header: "Status",
+        accessorKey: "StatusString", //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
         enableClickToCopy: true,
-        filterVariant: "autocomplete",
-        size: 90,
-        Cell: ({ renderedCellValue, cell }: any) => (
-          <Box
-            sx={(theme) => ({
-              backgroundColor:
-                cell.getValue() === "Closed"
-                  ? theme.palette.error.dark
-                  : ["Cancelled", "Frozen"].includes(cell.getValue())
-                  ? theme.palette.warning.dark
-                  : cell.getValue() === "OnHold"
-                  ? "orange" // Change color to orange for OnHold
-                  : theme.palette.success.dark,
-              borderRadius: ".5rem", // Rounded corners
-              color: "rgb(255, 255, 255)", // White text color
-              fontSize: "12px", // Font size
-              height: "25px", // Fixed height
-              padding: "0.25rem", // Padding
-              textAlign: "center", // Center-align text
-              display: "flex", // Flexbox for centering content
-              alignItems: "center", // Vertically center content
-              justifyContent: "center", // Horizontally center content
-            })}
-          >
-            {renderedCellValue}
-          </Box>
+        // filterVariant: "autocomplete",
+        filterVariant: "multi-select",
+        enableHiding: true,
+        enableColumnPinning: true, // Enable pinning for this column
+        enableColumnActions: true,
+        header: "Status",
+        size: 170,
+        Cell: ({ renderedCellValue, row, cell }: any) => (
+          <>
+            <Box
+              sx={(theme) => ({
+                backgroundColor:
+                  cell.getValue() === "Closed"
+                    ? theme.palette.error.dark
+                    : cell.getValue() === "On Hold"
+                    ? "#ff9800"
+                    : cell.getValue() === "Pending"
+                    ? "#999999"
+                    : cell.getValue() === "Interviews occurring"
+                    ? "#03a9f4"
+                    : cell.getValue() === "Cancelled"
+                    ? "#ef5350"
+                    : cell.getValue() === "Filled"
+                    ? "#01579b"
+                    : cell.getValue() === "Engagement Pending"
+                    ? "#9c27b0"
+                    : cell.getValue() === "Temp Block"
+                    ? "#0000ff"
+                    : theme.palette.success.main,
+                    borderRadius: ".5rem", // Rounded corners
+                    color: "rgb(255, 255, 255)", // White text color
+                    fontSize: "12px", // Font size
+                    height: "25px", // Fixed height
+                    padding: "0.25rem", // Padding
+                    textAlign: "center", // Center-align text
+                    display: "flex", // Flexbox for centering content
+                    alignItems: "center", // Vertically center content
+                    justifyContent: "center", // Horizontally center content
+                  })}
+            >
+              {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
+              <Tooltip title={renderedCellValue}>
+                <span>
+                  {renderedCellValue === "O" ? "Open" : renderedCellValue}
+                </span>
+              </Tooltip>
+            </Box>
+            <span>
+              {row.original.CustomField5 ? (
+                <Tooltip title={row.original.CustomField5}>
+                  <img
+                    style={{ width: "17px", marginLeft: "5px" }}
+                    src="https://img.icons8.com/?size=100&id=59825&format=png&color=000000"
+                  />
+                </Tooltip>
+              ) : null}
+              {row.original.AutoOffer_Fl &&
+              row.original.AutoOffer_Fl == true ? (
+                <>
+                  <img
+                    className="hotjobimage"
+                    src="https://media.tenor.com/VUH3A7tK-qgAAAAi/dm4uz3-foekoe.gif"
+                    style={{}}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
+              {row.original.HotFL && row.original.HotFL == true ? (
+                <>🌟</>
+              ) : (
+                <></>
+              )}
+            </span>
+          </>
         ),
       },
       {
