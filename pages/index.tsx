@@ -313,10 +313,11 @@ const Index = () => {
             .toString()
             .padStart(2, "0")}/${date.getFullYear().toString().slice(-2)}`;
         },
+        size: 110,
       },
       {
-        accessorKey: "EndDate",
-        header: "End Date",
+        accessorKey: "PostDate",
+        header: "Post Date",
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           if (!value) return " ";
@@ -327,6 +328,7 @@ const Index = () => {
             .toString()
             .padStart(2, "0")}/${date.getFullYear().toString().slice(-2)}`;
         },
+        size: 110,
       },
     ],
     []
